@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardUseCompatPadding="true"
+    app:contentPadding="@dimen/standart_half">
+
+    <LinearLayout
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/ivPoster"
+            android:layout_width="120dp"
+            android:layout_height="180dp"
+            android:adjustViewBounds="true"
+            tools:src="@tools:sample/avatars" />
+
+        <LinearLayout
+            android:layout_marginStart="@dimen/standart_half"
+            android:layout_marginEnd="@dimen/standart_half"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                tools:text="@tools:sample/lorem" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_marginTop="@dimen/standart_half"
+                android:layout_marginBottom="@dimen/standart_half"
+                android:id="@+id/tvReleaseDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                tools:text="@tools:sample/date/ddmmyy" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvOverview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                tools:text="@tools:sample/lorem/random" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>
