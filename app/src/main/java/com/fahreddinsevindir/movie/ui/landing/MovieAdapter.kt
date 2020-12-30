@@ -3,6 +3,7 @@ package com.fahreddinsevindir.movie.ui.landing
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.fahreddinsevindir.movie.R
 import com.fahreddinsevindir.movie.glide.GlideApp
@@ -33,6 +34,11 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
 
         fun bind(movie: Movie) {
+            itemView.setOnClickListener {
+                val directions =
+                    LandingFragmentDirections.actionLandingFragmentToMovieDetailsFragment(movie.id!!)
+                it.findNavController().navigate(directions)
+            }
 
             itemView.apply {
                 GlideApp.with(ivPoster)
