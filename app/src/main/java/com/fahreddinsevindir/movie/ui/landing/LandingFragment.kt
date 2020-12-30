@@ -36,7 +36,7 @@ class LandingFragment : Fragment(R.layout.fragment_landing) {
 
         landingViewModel.trendingMovies.observe(viewLifecycleOwner, Observer {
             when (it.status) {
-                
+
                 Status.SUCCESS -> {
                     showLoading(false)
                     movieAdapter.setMovies(it.data!!)

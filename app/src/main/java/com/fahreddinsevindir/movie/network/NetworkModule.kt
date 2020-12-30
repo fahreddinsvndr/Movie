@@ -1,16 +1,19 @@
 package com.fahreddinsevindir.movie.network
 
+import com.fahreddinsevindir.movie.BuildConfig
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
 import okhttp3.Call
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
+import javax.inject.Named
 import javax.inject.Singleton
 
 
@@ -28,9 +31,32 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideCallFactory(httpLoggingInterceptor: HttpLoggingInterceptor): Call.Factory {
+    fun provideTmdbApikeyInterceptor(@Named("tmdb_api_key") apiKey: String): Interceptor {
+        return Interceptor.invoke { chain ->
+            val originRequest = chain.request()
+            val originUrl = originRequest.url
+
+            val newUrl = originUrl.newBuilder()
+                .addQueryParameter("api_key", apiKey)
+                .build()
+
+            val newRequest = originRequest.newBuilder()
+                .url(newUrl)
+                .build()
+
+            chain.proceed(newRequest)
+        }
+    }
+
+    @Singleton
+    @Provides
+    fun provideCallFactory(
+        httpLoggingInterceptor: HttpLoggingInterceptor,
+        tmdbApiKeyInterceptor: Interceptor
+    ): Call.Factory {
         return OkHttpClient.Builder()
             .addInterceptor(httpLoggingInterceptor)
+            .addInterceptor(tmdbApiKeyInterceptor)
             .build()
     }
 
@@ -54,8 +80,16 @@ object NetworkModule {
 
     @Singleton
     @Provides
+    @Named("tmdb_base_url")
     fun provideBaseUrl(): String {
-        return "https://api.themoviedb.org/3/"
+        return BuildConfig.TMDB_BASE_URL
+    }
+
+    @Singleton
+    @Provides
+    @Named("tmdb_api_key")
+    fun provideTmdbApiKey(): String {
+        return BuildConfig.TMDB_API_KEY
     }
 
     @Singleton
@@ -64,7 +98,7 @@ object NetworkModule {
         httpLoggingInterceptor: Call.Factory,
         moshiConverterFactory: MoshiConverterFactory,
         rxJava3CallAdapterFactory: RxJava3CallAdapterFactory,
-        baseUrl: String
+        @Named("tmdb_base_url")baseUrl: String
     ): Retrofit {
         return Retrofit.Builder()
             .callFactory(httpLoggingInterceptor)
@@ -76,7 +110,7 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideMovieService(retrofit: Retrofit): MovieService{
+    fun provideMovieService(retrofit: Retrofit): MovieService {
         return retrofit.create(MovieService::class.java)
     }
 }
