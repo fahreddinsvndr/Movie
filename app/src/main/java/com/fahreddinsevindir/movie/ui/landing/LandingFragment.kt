@@ -8,8 +8,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.fahreddinsevindir.movie.R
+import com.fahreddinsevindir.movie.model.Status
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_landing.*
+import kotlinx.android.synthetic.main.layout_loading.*
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -32,8 +35,29 @@ class LandingFragment : Fragment(R.layout.fragment_landing) {
         super.onActivityCreated(savedInstanceState)
 
         landingViewModel.trendingMovies.observe(viewLifecycleOwner, Observer {
-            movieAdapter.setMovies(it)
+            when (it.status) {
+                
+                Status.SUCCESS -> {
+                    showLoading(false)
+                    movieAdapter.setMovies(it.data!!)
+                }
+                Status.LOADING -> showLoading(true)
+
+                Status.ERROR -> {
+                    showLoading(false)
+                    Snackbar.make(requireView(), it.message!!, Snackbar.LENGTH_LONG).show()
+                }
+            }
+
         })
+    }
+
+    private fun showLoading(isShow: Boolean) {
+        if (isShow) {
+            loadingContainer.visibility = View.VISIBLE
+        } else {
+            loadingContainer.visibility = View.GONE
+        }
     }
 
 }
