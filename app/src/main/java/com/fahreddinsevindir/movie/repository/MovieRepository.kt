@@ -1,5 +1,6 @@
 package com.fahreddinsevindir.movie.repository
 
+import com.fahreddinsevindir.movie.model.Movie
 import com.fahreddinsevindir.movie.model.Movies
 import com.fahreddinsevindir.movie.network.MovieService
 import io.reactivex.rxjava3.core.Single
@@ -14,6 +15,11 @@ class MovieRepository @Inject constructor(
 
     fun getTrendingMovie(): Single<Movies> {
         return movieService.getTrendingMovie()
+            .subscribeOn(Schedulers.io())
+    }
+
+    fun getMovieDetails(movieId: Long): Single<Movie> {
+        return movieService.getMovie(movieId)
             .subscribeOn(Schedulers.io())
     }
 }

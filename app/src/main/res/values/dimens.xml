@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="standart_half">8dp</dimen>
+    <dimen name="standart_quart">4dp</dimen>
     <dimen name="standart">16dp</dimen>
 </resources>
