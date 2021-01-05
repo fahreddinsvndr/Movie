@@ -9,23 +9,37 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.fahreddinsevindir.movie.R
 import com.fahreddinsevindir.movie.glide.GlideApp
+import com.fahreddinsevindir.movie.model.Cast
 import com.fahreddinsevindir.movie.model.Status
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_movie_details.*
 import kotlinx.android.synthetic.main.layout_loading.*
 
+const val MAX_CAST_COUNT = 10
+
 @AndroidEntryPoint
 class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
 
     private val viewModel: MovieDetailsViewModel by viewModels()
+    private lateinit var castAdapter: CastAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         ibBack.setOnClickListener {
             it.findNavController().popBackStack()
+        }
+
+        castAdapter = CastAdapter()
+
+        rvCast.apply {
+            isNestedScrollingEnabled = false
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            adapter = castAdapter
         }
     }
 
@@ -74,12 +88,21 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
                         tvReleaseDate.visibility = View.GONE
                     }
 
-                    movie?.voteAverage?.let {rating->
+                    movie?.voteAverage?.let { rating ->
                         rbRating.rating = (rating / 2).toFloat()
                     }
 
                     tvVoteCount.text = movie?.voteCount.toString()
                     tvOverview.text = movie?.overview
+
+                    val casts = movie?.credits?.cast
+
+                    if (casts != null && casts.isNotEmpty()) {
+                        val numberOfCast =
+                            if (casts.size <= MAX_CAST_COUNT) casts.size else MAX_CAST_COUNT
+
+                        castAdapter.submitList(casts.take(numberOfCast))
+                    }
                 }
                 Status.ERROR -> {
                     showLoading(false)
