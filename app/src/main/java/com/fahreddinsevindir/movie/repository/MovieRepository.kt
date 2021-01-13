@@ -4,6 +4,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.rxjava3.flowable
+import com.fahreddinsevindir.movie.model.Cast
 import com.fahreddinsevindir.movie.model.Movie
 import com.fahreddinsevindir.movie.model.Movies
 import com.fahreddinsevindir.movie.network.MovieService
@@ -32,6 +33,11 @@ class MovieRepository @Inject constructor(
 
     fun getMovieDetails(movieId: Long): Single<Movie> {
         return movieService.getMovie(movieId)
+            .subscribeOn(Schedulers.io())
+    }
+
+    fun getCastDetails(castId: Long): Single<Cast> {
+        return movieService.getCastDetails(castId)
             .subscribeOn(Schedulers.io())
     }
 }

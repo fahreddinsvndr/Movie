@@ -1,6 +1,7 @@
 package com.fahreddinsevindir.movie.network
 
 import com.fahreddinsevindir.movie.BuildConfig
+import com.fahreddinsevindir.movie.model.adapter.ZonedDateTimeAdapter
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
@@ -63,13 +64,15 @@ object NetworkModule {
     @Singleton
     @Provides
     fun provideMoshi(): Moshi {
-        return Moshi.Builder().build()
+        return Moshi.Builder()
+            .add(ZonedDateTimeAdapter())
+            .build()
     }
 
     @Singleton
     @Provides
-    fun provideMoshiConverterFactory(): MoshiConverterFactory {
-        return MoshiConverterFactory.create()
+    fun provideMoshiConverterFactory(moshi: Moshi): MoshiConverterFactory {
+        return MoshiConverterFactory.create(moshi)
     }
 
     @Singleton

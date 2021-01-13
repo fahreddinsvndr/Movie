@@ -4,6 +4,7 @@ import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -28,6 +29,12 @@ class CastAdapter : ListAdapter<Cast, CastAdapter.CastViewHolder>(COMPARATOR) {
     class CastViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(cast: Cast) {
             itemView.apply {
+
+                setOnClickListener {
+                    it.findNavController().navigate(
+                        MovieDetailsFragmentDirections.actionMovieDetailsFragmentToCastFragment(cast)
+                    )
+                }
 
                 val paddingSize = 8f.toPx()
                 val itemWidthSize = Resources.getSystem().displayMetrics.widthPixels / 2.75

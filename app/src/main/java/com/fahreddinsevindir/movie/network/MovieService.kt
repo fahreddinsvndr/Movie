@@ -1,5 +1,6 @@
 package com.fahreddinsevindir.movie.network
 
+import com.fahreddinsevindir.movie.model.Cast
 import com.fahreddinsevindir.movie.model.Movie
 import com.fahreddinsevindir.movie.model.Movies
 import io.reactivex.rxjava3.core.Single
@@ -14,4 +15,7 @@ interface MovieService {
 
     @GET("movie/{movieId}?append_to_response=credits")
     fun getMovie(@Path("movieId") movieId: Long): Single<Movie>
+
+    @GET("person/{id}")
+    fun getCastDetails(@Path("id") castId: Long): Single<Cast>
 }
